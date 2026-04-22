@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const ring = document.getElementById('landolt-ring');
+    const animalContainer = document.getElementById('animal-silhouette');
     const btnRotate = document.getElementById('btn-rotate');
+    const btnModeToggle = document.getElementById('btn-mode-toggle');
     const btnSizeUp = document.getElementById('btn-size-up');
     const btnSizeDown = document.getElementById('btn-size-down');
     const sizeDisplay = document.getElementById('current-size');
@@ -10,9 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentSizeLevel = 3;
     let currentRotation = 0;
+    let currentAnimalIndex = 0;
     let isTransitioning = false;
+    let isAnimalMode = false;
 
     const orientations = [0, 90, 180, 270]; // 右, 下, 左, 上
+
+    // 動物の画像パス (Icoｎフォルダ内の1.png〜4.png)
+    const animals = [
+        'Icoｎ/1.png',
+        'Icoｎ/2.png',
+        'Icoｎ/3.png',
+        'Icoｎ/4.png'
+    ];
 
     // Web Audio APIの初期化
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -81,13 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        ring.classList.add('hidden');
+        const activeElement = isAnimalMode ? animalContainer : ring;
+        activeElement.classList.add('hidden');
         
         setTimeout(() => {
             updateFn();
             // 少し長めに待ってから再表示する（変化をわかりにくくするため）
             setTimeout(() => {
-                ring.classList.remove('hidden');
+                activeElement.classList.remove('hidden');
                 setTimeout(() => {
                     isTransitioning = false;
                 }, 100);
@@ -96,9 +109,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * モードを切り替える
+     */
+    function toggleMode() {
+        if (isTransitioning) return;
+        
+        isAnimalMode = !isAnimalMode;
+        
+        if (isAnimalMode) {
+            ring.classList.add('display-none');
+            animalContainer.classList.remove('display-none');
+            updateAnimal();
+        } else {
+            animalContainer.classList.add('display-none');
+            ring.classList.remove('display-none');
+            rotateRandomly();
+        }
+    }
+
+    /**
+     * 動物をランダムに変更する
+     */
+    function updateAnimal() {
+        updateRingWithAnimation(() => {
+            let nextIndex;
+            do {
+                nextIndex = Math.floor(Math.random() * animals.length);
+            } while (nextIndex === currentAnimalIndex);
+            
+            currentAnimalIndex = nextIndex;
+            animalContainer.innerHTML = `<img src="${animals[currentAnimalIndex]}" alt="動物のシルエット" style="width:100%; height:100%; object-fit:contain;">`;
+        });
+    }
+
+    /**
      * ランドルト環の向きをランダムに変更する
      */
     function rotateRandomly() {
+        if (isAnimalMode) {
+            updateAnimal();
+            return;
+        }
+
         updateRingWithAnimation(() => {
             let newRotation;
             do {
@@ -118,9 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextLevel = currentSizeLevel + delta;
         if (nextLevel >= 1 && nextLevel <= 5) {
             updateRingWithAnimation(() => {
-                ring.classList.remove(`level-${currentSizeLevel}`);
+                const target = isAnimalMode ? animalContainer : ring;
+                target.classList.remove(`level-${currentSizeLevel}`);
                 currentSizeLevel = nextLevel;
-                ring.classList.add(`level-${currentSizeLevel}`);
+                target.classList.add(`level-${currentSizeLevel}`);
                 
                 sizeDisplay.textContent = currentSizeLevel;
 
@@ -134,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // イベントリスナー
     btnRotate.addEventListener('click', rotateRandomly);
+    btnModeToggle.addEventListener('click', toggleMode);
     
     btnSizeUp.addEventListener('click', () => changeSize(1));
     btnSizeDown.addEventListener('click', () => changeSize(-1));
@@ -153,6 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
         switch (e.key) {
+            case 'm': // モード切替
+            case 'M':
+                toggleMode();
+                break;
             case 'ArrowUp':
                 changeSize(1);
                 break;
@@ -166,17 +224,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 rotateRandomly();
                 break;
             case 'o': // ○
-            case 'Enter':
+            case 'O':
                 showFeedback('correct');
                 break;
             case 'x': // ×
-            case 'Escape':
+            case 'X':
                 showFeedback('wrong');
                 break;
         }
     });
 
-    // 初期状態の向きをランダムに設定 (初回はアニメーションなしで表示)
+    // 初期状態の設定
+    animalContainer.classList.add('display-none');
+    
+    // 初回はアニメーションなしで表示
     currentRotation = orientations[Math.floor(Math.random() * orientations.length)];
     ring.style.transform = `rotate(${currentRotation}deg)`;
 });

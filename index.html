@@ -18,26 +18,24 @@
 
         <main>
             <div class="test-area">
-                <!-- 左側の向き変更ボタン -->
+                <!-- 左側の向き変更・モード切替ボタン -->
                 <div class="control-left">
-                    <button id="btn-rotate" title="向きを変える" aria-label="向きを変える">
+                    <button id="btn-mode-toggle" title="モード切替" aria-label="モード切替">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15L12,18.17M12,5.83L15.17,9L16.59,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
+                        </svg>
+                    </button>
+                    <button id="btn-rotate" title="向きを変える / 次の絵" aria-label="向きを変える">
                         <svg viewBox="0 0 24 24" width="24" height="24">
                             <path fill="currentColor" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
                         </svg>
                     </button>
                 </div>
 
-                <!-- ランドルト環表示エリア -->
+                <!-- 視標表示エリア -->
                 <div class="landolt-container">
                     <div id="landolt-ring" class="landolt-ring level-3">
                         <svg viewBox="0 0 100 100">
-                            <!-- 
-                                国際規格に基づくランドルト環:
-                                外径: 5, 内径: 3, 切れ目の幅: 1 の比率
-                                中心 (50, 50), 半径 40 (外径 80)
-                                ストローク幅 16 (1/5 of 80)
-                                切れ目 16 (1/5 of 80)
-                            -->
                             <circle cx="50" cy="50" r="32" 
                                 fill="none" 
                                 stroke="black" 
@@ -45,6 +43,9 @@
                                 stroke-dasharray="185 16.5" 
                                 stroke-dashoffset="193" />
                         </svg>
+                    </div>
+                    <div id="animal-silhouette" class="animal-silhouette level-3 hidden">
+                        <!-- ここに動物のSVGがJSで挿入されます -->
                     </div>
                 </div>
 

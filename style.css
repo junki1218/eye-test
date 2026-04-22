@@ -71,19 +71,35 @@ h1 {
     perspective: 1000px;
 }
 
-.landolt-ring {
+.landolt-ring, .animal-silhouette {
     transition: opacity 0.1s ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
 }
 
-.landolt-ring.hidden {
+.landolt-ring.hidden, .animal-silhouette.hidden {
     opacity: 0;
+    pointer-events: none;
 }
 
-.landolt-ring svg {
+/* 完全に非表示にするためのユーティリティ */
+.display-none {
+    display: none !important;
+}
+
+.landolt-ring svg, .animal-silhouette svg {
     display: block;
     width: 100%;
     height: 100%;
+}
+
+/* モード切替ボタンのスタイル */
+#btn-mode-toggle {
+    background-color: #9b59b6;
+    color: white;
+}
+
+#btn-mode-toggle:hover {
+    background-color: #8e44ad;
 }
 
 /* 判定表示オーバーレイ */
