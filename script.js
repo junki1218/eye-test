@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTransitioning) return;
         
         isAnimalMode = !isAnimalMode;
+        console.log("Mode toggled. Animal mode:", isAnimalMode); // デバッグ用
         
         if (isAnimalMode) {
             ring.classList.add('display-none');
@@ -186,18 +187,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // イベントリスナー
-    btnRotate.addEventListener('click', rotateRandomly);
-    btnModeToggle.addEventListener('click', toggleMode);
-    
-    btnSizeUp.addEventListener('click', () => changeSize(1));
-    btnSizeDown.addEventListener('click', () => changeSize(-1));
+    const clickEvent = ('ontouchstart' in window) ? 'touchstart' : 'click';
 
-    btnCorrect.addEventListener('click', () => {
+    btnRotate.addEventListener('click', (e) => {
+        e.preventDefault();
+        rotateRandomly();
+    });
+
+    btnModeToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleMode();
+    });
+    
+    btnSizeUp.addEventListener('click', (e) => {
+        e.preventDefault();
+        changeSize(1);
+    });
+
+    btnSizeDown.addEventListener('click', (e) => {
+        e.preventDefault();
+        changeSize(-1);
+    });
+
+    btnCorrect.addEventListener('click', (e) => {
+        e.preventDefault();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         showFeedback('correct');
     });
     
-    btnWrong.addEventListener('click', () => {
+    btnWrong.addEventListener('click', (e) => {
+        e.preventDefault();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         showFeedback('wrong');
     });

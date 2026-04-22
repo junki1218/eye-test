@@ -28,26 +28,30 @@ body {
 .app-container {
     width: 100%;
     max-width: 800px;
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
 }
 
 header {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 
 h1 {
     font-weight: 600;
     letter-spacing: -0.02em;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
 }
 
 .subtitle {
     font-weight: 300;
     color: #95a5a6;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     letter-spacing: 0.2em;
 }
 
@@ -56,10 +60,10 @@ h1 {
     justify-content: space-around;
     align-items: center;
     background: white;
-    padding: 3rem;
+    padding: 2rem;
     border-radius: 2rem;
     box-shadow: var(--shadow);
-    min-height: 400px;
+    min-height: 350px;
     position: relative;
 }
 
@@ -74,11 +78,18 @@ h1 {
 .landolt-ring, .animal-silhouette {
     transition: opacity 0.1s ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
+    position: relative;
 }
 
 .landolt-ring.hidden, .animal-silhouette.hidden {
     opacity: 0;
     pointer-events: none;
+}
+
+.animal-silhouette {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 完全に非表示にするためのユーティリティ */
@@ -167,9 +178,68 @@ h1 {
 /* 5段階のサイズ */
 .level-1 { width: 40px; height: 40px; }
 .level-2 { width: 80px; height: 80px; }
-.level-3 { width: 120px; height: 120px; } /* デフォルト */
-.level-4 { width: 200px; height: 200px; }
-.level-5 { width: 320px; height: 320px; }
+.level-3 { width: 120px; height: 120px; }
+.level-4 { width: clamp(150px, 40vw, 200px); height: clamp(150px, 40vw, 200px); }
+.level-5 { width: clamp(200px, 70vw, 320px); height: clamp(200px, 70vw, 320px); }
+
+/* モバイル向け調整 */
+@media (max-width: 600px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .app-container {
+        padding: 0.5rem;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    header {
+        margin-bottom: 1rem;
+    }
+
+    .test-area {
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+        gap: 1rem;
+        min-height: 400px;
+    }
+
+    .control-left, .control-right {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .control-right {
+        order: 3;
+    }
+
+    .landolt-container {
+        order: 2;
+        min-height: 200px;
+        padding: 1rem 0;
+    }
+
+    .feedback-overlay {
+        font-size: 8rem;
+    }
+
+    .feedback-controls {
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .feedback-btn {
+        width: 70px;
+        height: 70px;
+    }
+
+    footer {
+        margin-top: 1.5rem;
+    }
+}
 
 /* コントロールパネル */
 .control-left, .control-right {
